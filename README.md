@@ -25,7 +25,7 @@ decisions, influencing credit pricing, portfolio management strategies, and regu
 for individual borrowers or portfolios, PD enables financial institutions to make informed decisions, allocate resources effectively, 
 and mitigate potential losses in their credit portfolios.
 
-This notes summarized the most important points to consider when developing scorecards, Probability of Default Model Development with
+This note summarized the most important points to consider when developing scorecards, Probability of Default Model Development with
 Generalized Linear Models.
 
 Enjoy!
