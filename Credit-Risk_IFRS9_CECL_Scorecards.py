@@ -57,7 +57,7 @@ df0.head(5)
 
 
 # check/count for missing / NAN data
-NAN = (df0.isna().sum()/len(df0)).sort_values(ascending=False)*100
+NA = (df0.isna().sum()/len(df0)).sort_values(ascending=False)*100
 NA[NA>0]
 
 
@@ -510,13 +510,12 @@ plt.show()
 
 # In[301]:
 
-
-
 # COMPARISON OF ACTUAL VERSUS FITTED PDS (BY SCORE BAND)
 
 # Create score bands
 cuts = [-np.inf, 517, 576, 605, 632, 667, 716, 746, 773, np.inf]
-labels = ['01 <=517', '02 <=576', '03 <=605', '04 <=632', '05 <=667',          '06 <=716', '07 <=746', '09 <=773', '09 >517']
+labels = ['01 <=517', '02 <=576', '03 <=605', '04 <=632', '05 <=667',\
+          '06 <=716', '07 <=746', '09 <=773', '09 >517']
 
 # Bin the 'score' variable based on the specified cuts
 data_score['score_woe'] = pd.cut(data_score['score'], bins=cuts, labels=labels)
@@ -526,12 +525,14 @@ data_score['score_woe'] = pd.cut(data_score['score'], bins=cuts, labels=labels)
 data_pd = data_score.groupby('score_woe').agg(mean_dr=('default_event', 'mean'), mean_pd=('pd', 'mean')).round(4).reset_index()
 
 plt.figure(figsize=(8, 6))
+plt.plot(data_pd['score_woe'], data_pd['mean_dr'], '--', color='blue', lw=1, label='Actual')
 plt.plot(data_pd['score_woe'], data_pd['mean_dr'], 'o', color='blue', lw=2)
-plt.plot(data_pd['score_woe'], data_pd['mean_dr'], '--', color='red', lw=2)
-plt.xticks(['01 <=517',  '03 <=605', '05 <=667',            '07 <=746', '09 >517'])
-plt.title('Actual vs. Fitted')
+plt.plot(data_pd['score_woe'], data_pd['mean_pd'], '-',  color='red', lw=1, label='Fitted')
+plt.xticks(['01 <=517',  '03 <=605', '05 <=667', '07 <=746', '09 >517'])
+plt.title('Actual vs. Fitted PD')
 plt.xlabel('Band')
 plt.ylabel('Rate')
+plt.legend()
 plt.show()
 
 # Compute rmse
