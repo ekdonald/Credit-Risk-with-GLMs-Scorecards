@@ -143,7 +143,7 @@ plt.show()
 
 
 ### Remove outliers
-df2 = df.loc[(df["origination_date"] <= '2017-08-17')].copy()
+df2 = df.loc[(df["origination_date"] <= '2007-08-17')].copy()
 
 # Round arrears count fields
 df2.loc[:,'max_arrears_12m'] = df2['max_arrears_12m'].round(4)
@@ -526,7 +526,9 @@ data_pd = data_score.groupby('score_woe').agg(mean_dr=('default_event', 'mean'),
 
 plt.figure(figsize=(8, 6))
 plt.plot(data_pd['score_woe'], data_pd['mean_dr'], '--', color='blue', lw=1, label='Actual')
-plt.plot(data_pd['score_woe'], data_pd['mean_dr'], 'o', color='blue', lw=2)
+#plt.plot(data_pd['score_woe'], data_pd['mean_dr'], 'o', color='blue', lw=2)
+for band in range(len(data_pd)):
+    plt.hlines(data_pd['mean_dr'][band], band-0.5, band+0.5, color='black', lw=3)    
 plt.plot(data_pd['score_woe'], data_pd['mean_pd'], '-',  color='red', lw=1, label='Fitted')
 plt.xticks(['01 <=517',  '03 <=605', '05 <=667', '07 <=746', '09 >517'])
 plt.title('Actual vs. Fitted PD')
