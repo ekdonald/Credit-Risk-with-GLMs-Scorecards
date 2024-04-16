@@ -58,7 +58,7 @@ from datetime import datetime
 
 
 # Import data (data will be provided with this code)
-df = pd.read_csv('data/Chap2/chap2oneypdcsv.csv', header=0, sep='"",""|,"|,|",|"""|,""|"",|","',                  engine='python').replace('"', '', regex=True).iloc[:, 1:45]
+df = pd.read_csv('chap2oneypdcsv.csv', header=0, sep='"",""|,"|,|",|"""|,""|"",|","',                  engine='python').replace('"', '', regex=True).iloc[:, 1:45]
 
 # Default flag definition
 df.loc[:, 'default_event'] = df.apply(lambda row: 'Yes' if row['arrears_event'] == 1                                           or row['term_expiry_event'] == 1                                           or row['bankrupt_event'] == 1 else 'No', axis=1)
@@ -90,7 +90,7 @@ datadf = df.drop(['recent_arrears_date', 'months_since_2mia'], axis=1)
 datadf.dropna(inplace=True)
 
 # Date format for relevant date type columns: "origination_date", "maturity_date"
-datadf[["origination_date", "maturity_date"]] =                        datadf[["origination_date", "maturity_date"]].apply(pd.to_datetime)
+datadf[["origination_date", "maturity_date"]] = datadf[["origination_date", "maturity_date"]].apply(pd.to_datetime)
 
 # change dtype for columns
 datadf[["months_since_recent_cc_delinq"]] = datadf[["months_since_recent_cc_delinq"]].astype('int')
@@ -141,7 +141,7 @@ plt.figure(figsize=(10, 6))
 plt.title("Variable Importance")
 plt.bar(range(train.drop(columns=['default_indicator', 'default_event']).shape[1]), importances[indices],
         align="center")
-plt.xticks(range(train.drop(columns=['default_indicator', 'default_event']).shape[1]),           train.drop(columns=['default_indicator', 'default_event']).columns[indices], rotation=90)
+plt.xticks(range(train.drop(columns=['default_indicator', 'default_event']).shape[1]), train.drop(columns=['default_indicator', 'default_event']).columns[indices], rotation=90)
 plt.tight_layout()
 plt.show()
 
@@ -252,9 +252,9 @@ print("Mean Squared Error with Shrinkage (learning rate=0.2):", mse_boost_oneypd
 # 
 # These metrics from  Gradient Boosting Regressor regularization suggest that:
 # 
-# - Mean Squared Error without Shrinkage: The MSE without shrinkage is 0.03000333288142499. This represents the error incurred by the model when each new tree in the ensemble is added at full strength, without applying any regularization through shrinkage.
+# - Mean Squared Error without Shrinkage: The MSE without shrinkage is 0.030. This represents the error incurred by the model when each new tree in the ensemble is added at full strength, without applying any regularization through shrinkage.
 # 
-# - Mean Squared Error with Shrinkage (Learning Rate=0.2): The MSE with shrinkage (learning rate=0.2) is 0.03067419142896672. This indicates the error incurred by the model when a learning rate of 0.2 is applied, meaning that each new tree's contribution to the ensemble is reduced by a factor of 0.2 before being added to the model.
+# - Mean Squared Error with Shrinkage (Learning Rate=0.2): The MSE with shrinkage (learning rate=0.2) is 0.031. This indicates the error incurred by the model when a learning rate of 0.2 is applied, meaning that each new tree's contribution to the ensemble is reduced by a factor of 0.2 before being added to the model.
 # 
 # From these values, we can observe that the MSE with shrinkage is slightly higher than the MSE without shrinkage. However, it's essential to note that shrinkage is a regularization technique aimed at improving the model's generalization performance by preventing overfitting. Even though the MSE with shrinkage might be slightly higher, the model's generalization capabilities could potentially be better due to the regularization effect of shrinkage. 
 # 
@@ -263,14 +263,14 @@ print("Mean Squared Error with Shrinkage (learning rate=0.2):", mse_boost_oneypd
 
 
 
-# 1. Create the data set
+# Create the data set
 # Predict probabilities using the random forest model
 pred_orig = rf_oneypd.predict_proba(oneypd_tree_sel.drop(columns=['default_event', 'default_indicator']))[:, 1]
 
 # Create a DataFrame with default event and predicted probabilities
 rf_db_cal = pd.DataFrame({'def': oneypd_tree_sel['default_indicator'], 'pred': pred_orig})
 
-# 2. Fit calibration function
+# Fit calibration function
 # Fit a logistic regression model to calibrate the predicted probabilities
 pd_model = LogisticRegression()
 pd_model.fit(rf_db_cal[['pred']], rf_db_cal['def'])
@@ -294,7 +294,7 @@ def create_bands(pred_prob, num_bins=5):
     return pd.cut(pred_prob, bins, labels=[f'Bin {i+1}' for i in range(num_bins)], include_lowest=True)
 
 # Predict probabilities using the random forest model
-predict_test_orig = rf_oneypd.predict_proba(                   test.drop(columns=['default_event', 'default_indicator']))[:, 1]
+predict_test_orig = rf_oneypd.predict_proba(test.drop(columns=['default_event', 'default_indicator']))[:, 1]
 
 # Calculate AUC
 auc_test = roc_auc_score(test['default_indicator'].values, predict_test_orig)
