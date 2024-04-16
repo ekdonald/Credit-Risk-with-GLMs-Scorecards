@@ -26,6 +26,6 @@ for individual borrowers or portfolios, PD enables financial institutions to mak
 and mitigate potential losses in their credit portfolios.
 
 This note summarized the most important points to consider when developing scorecards, Probability of Default Model Development with
-Generalized Linear Models.
+Generalized Linear Models, Machine Learning, ...
 
 Enjoy!
